@@ -31,10 +31,10 @@ const eventSchema = new Schema(
       default: "Super cool show",
     },
 
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    // createdBy: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    // },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
