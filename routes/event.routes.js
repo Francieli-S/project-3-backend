@@ -41,7 +41,7 @@ router.post("/create", async (req, res, next) => {
 
 router.put("/:eventId", async (req, res, next) => {
   try {
-    const { eventId } = req.params.id;
+    const { eventId } = req.params;
     const payload = req.body;
     const updatedEvent = await Event.findByIdAndUpdate(eventId, payload, {
       new: true,
