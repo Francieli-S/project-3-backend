@@ -21,8 +21,8 @@ router.get("/all-events", async (req, res, next) => {
 
 router.get("/:eventId", async (req, res, next) => {
   try {
-    const oneEvent = await Event.find(req.params.eventId);
-    res.status(200).json("Get one Event");
+    const oneEvent = await Event.findById(req.params.eventId);
+    res.status(200).json(oneEvent);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
