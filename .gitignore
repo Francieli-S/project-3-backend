@@ -1,5 +1,9 @@
 # Dependency directories
+<<<<<<< HEAD
 node_modules/
+=======
+node_modules/ 
+>>>>>>> b596709461cd84730cb4b8f8bb56310678b60a7d
 
 # Debug log from npm
 npm-debug.log
