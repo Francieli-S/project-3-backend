@@ -12,7 +12,7 @@ router.get("/", (req, res, next) => {
 router.get("/all-events", async (req, res, next) => {
   try {
     const allEvents = await Event.find();
-    res.status(200).json("Get all Events");
+    res.status(200).json(allEvents);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
