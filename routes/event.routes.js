@@ -21,8 +21,8 @@ router.get("/all-events", async (req, res, next) => {
 
 router.get("/:eventId", async (req, res, next) => {
   try {
-    const oneEvent = await Event.find(req.params.eventId);
-    res.status(200).json("Get one Event");
+    const oneEvent = await Event.findById(req.params.eventId);
+    res.status(200).json(oneEvent);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
@@ -41,7 +41,7 @@ router.post("/create", async (req, res, next) => {
 
 router.put("/:eventId", async (req, res, next) => {
   try {
-    const { eventId } = req.params.id;
+    const { eventId } = req.params;
     const payload = req.body;
     const updatedEvent = await Event.findByIdAndUpdate(eventId, payload, {
       new: true,

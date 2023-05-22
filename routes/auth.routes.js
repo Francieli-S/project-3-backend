@@ -3,6 +3,7 @@ const User = require("../models/User.model");
 const bcryptjs = require("bcryptjs");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const router = require("express").Router();
+const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/; // spec char, a capital, 8 characters long
 
 router.get("/", (req, res, next) => {
   res.json("Auth good in here");
@@ -14,10 +15,21 @@ router.post("/signup", async (req, res) => {
   console.log(req.body.email, req.body.password);
   const passwordHash = bcryptjs.hashSync(req.body.password, salt);
   try {
-    await User.create({ email: req.body.email, password: passwordHash });
-    res.status(201).json({ message: "New user created" });
+    const potentialUser = await User.findOne({ email: req.body.email });
+    if (!potentialUser) {
+      if (pwdRegex.test(req.body.password)) {
+        await User.create({ email: req.body.email, password: passwordHash });
+        res.status(201).json({ message: "New user created" });
+      } else {
+        // Password not strong enough
+        res.status(401).send("Password not strong enough");
+      }
+    } else {
+      // Already a registered user
+      res.status(401).send("Already a registered user");
+    }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json(error);
   }
 });
@@ -38,9 +50,11 @@ router.post("/login", async (req, res) => {
       res.json(authToken);
     } else {
       // Password is not correct
+      res.status(401).send("Password is not correct");
     }
   } else {
     // No user found
+    res.status(401).send("No user found");
   }
 });
 
