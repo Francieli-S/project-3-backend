@@ -10,7 +10,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/all-events", async (req, res, next) => {
-  const {search, blues} = req.query
+  const {search, blues, rock, folk} = req.query
   try {
     let filter = {}
     if (search) {
@@ -18,6 +18,12 @@ router.get("/all-events", async (req, res, next) => {
     }
     if (blues) {
       filter.genre = {$in: 'blues'}
+    } 
+    if (rock) {
+      filter.genre = {$in: 'rock'}
+    } 
+    if (folk) {
+      filter.genre = {$in: 'folk'}
     } 
     console.log(filter)
     const allEvents = await Event.find(filter);
