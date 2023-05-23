@@ -10,8 +10,18 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/all-events", async (req, res, next) => {
+  const {search, blues} = req.query
   try {
-    const allEvents = await Event.find();
+    let filter = {}
+    if (search) {
+      filter = {title: {$regex: search, $options: 'i'}}
+    }
+    if (blues) {
+      filter.genre = {$in: 'blues'}
+    } 
+    console.log(filter)
+    const allEvents = await Event.find(filter);
+    //allEvents.map((event) => {...event, isEditable: isOwnedByCurrentUser})
     res.status(200).json(allEvents);
   } catch (error) {
     console.log(error);
