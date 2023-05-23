@@ -7,8 +7,8 @@ router.get("/", (req, res, next) => {
 
 router.get("/all-comments/:eventId", async (req, res, next) => {
   try {
-    const {eventId} = req.params
-    const allComments = await Comment.find({eventAbout: eventId});
+    const { eventId } = req.params;
+    const allComments = await Comment.find({ eventAbout: eventId });
     res.status(200).json(allComments);
   } catch (error) {
     console.log(error);

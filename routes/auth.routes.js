@@ -22,11 +22,13 @@ router.post("/signup", async (req, res) => {
         res.status(201).json({ message: "New user created" });
       } else {
         // Password not strong enough
-        res.status(401).send("Password not strong enough");
+        res.status(401).json({ message: "Password not strong enough" });
+        return;
       }
     } else {
       // Already a registered user
-      res.status(401).send("Already a registered user");
+      res.status(402).json({ message: "Already a registered user" });
+      return;
     }
   } catch (error) {
     //console.log(error);
@@ -50,11 +52,11 @@ router.post("/login", async (req, res) => {
       res.json(authToken);
     } else {
       // Password is not correct
-      res.status(401).send("Password is not correct");
+      res.status(401).json({ message: "Password is not correct" });
     }
   } else {
     // No user found
-    res.status(401).send("No user found");
+    res.status(402).json({ message: "No user found" });
   }
 });
 
