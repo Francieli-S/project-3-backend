@@ -35,6 +35,17 @@ router.get("/all-events", async (req, res, next) => {
   }
 });
 
+router.get("/all-events/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const allEvents = await Event.find({ createdBy: userId });
+    res.status(200).json(allEvents);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
 router.get("/:eventId", async (req, res, next) => {
   try {
     const oneEvent = await Event.findById(req.params.eventId);
