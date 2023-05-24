@@ -37,6 +37,33 @@ router.get("/all-events", async (req, res, next) => {
   }
 });
 
+router.get("/all-events/my-events", isAuthenticated, async (req, res, next) => {
+  const { search, blues, rock, folk } = req.query;
+  try {
+    let filter = {};
+    if (search) {
+      filter = { title: { $regex: search, $options: "i" } };
+    }
+    if (blues) {
+      filter.genre = { $in: "blues" };
+    }
+    if (rock) {
+      filter.genre = { $in: "rock" };
+    }
+    if (folk) {
+      filter.genre = { $in: "folk" };
+    }
+    const user = req.payload.userId;
+    console.log("user id!!", user);
+    const myEvents = await Event.find({ createdBy: user });
+    //allEvents.map((event) => {...event, isEditable: isOwnedByCurrentUser})
+    res.status(200).json(myEvents);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
 router.get("/:eventId", async (req, res, next) => {
   try {
     const oneEvent = await Event.findById(req.params.eventId);
@@ -49,7 +76,7 @@ router.get("/:eventId", async (req, res, next) => {
 
 router.post("/create", isAuthenticated, async (req, res, next) => {
   try {
-    console.log("event body", req.config.headers.authorization);
+    //console.log("event body", req.config.headers.authorization);
     const newEvent = await Event.create({
       ...req.body,
       createdBy: req.payload.userId,
