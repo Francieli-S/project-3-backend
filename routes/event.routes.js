@@ -29,7 +29,6 @@ router.get("/all-events", async (req, res, next) => {
     }
     console.log(filter);
     const allEvents = await Event.find(filter);
-    //allEvents.map((event) => {...event, isEditable: isOwnedByCurrentUser})
     res.status(200).json(allEvents);
   } catch (error) {
     console.log(error);
