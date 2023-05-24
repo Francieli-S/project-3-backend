@@ -1,4 +1,6 @@
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Event = require("../models/Event.model");
+const User = require("../models/User.model");
 const router = require("express").Router();
 
 router.get("/", (req, res, next) => {
@@ -10,22 +12,22 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/all-events", async (req, res, next) => {
-  const {search, blues, rock, folk} = req.query
+  const { search, blues, rock, folk } = req.query;
   try {
-    let filter = {}
+    let filter = {};
     if (search) {
-      filter = {title: {$regex: search, $options: 'i'}}
+      filter = { title: { $regex: search, $options: "i" } };
     }
     if (blues) {
-      filter.genre = {$in: 'blues'}
-    } 
+      filter.genre = { $in: "blues" };
+    }
     if (rock) {
-      filter.genre = {$in: 'rock'}
-    } 
+      filter.genre = { $in: "rock" };
+    }
     if (folk) {
-      filter.genre = {$in: 'folk'}
-    } 
-    console.log(filter)
+      filter.genre = { $in: "folk" };
+    }
+    console.log(filter);
     const allEvents = await Event.find(filter);
     //allEvents.map((event) => {...event, isEditable: isOwnedByCurrentUser})
     res.status(200).json(allEvents);
@@ -45,9 +47,13 @@ router.get("/:eventId", async (req, res, next) => {
   }
 });
 
-router.post("/create", async (req, res, next) => {
+router.post("/create", isAuthenticated, async (req, res, next) => {
   try {
-    const newEvent = await Event.create(req.body);
+    console.log("event body", req.config.headers.authorization);
+    const newEvent = await Event.create({
+      ...req.body,
+      createdBy: req.payload.userId,
+    });
     res.status(201).json(newEvent);
   } catch (error) {
     console.log(error);
