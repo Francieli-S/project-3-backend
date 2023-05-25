@@ -36,13 +36,6 @@ router.get("/all-events", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
-router.get("/all-events/:userId", async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const allEvents = await Event.find({ createdBy: userId });
-    res.status(200).json(allEvents);
-=======
 router.get("/all-events/my-events", isAuthenticated, async (req, res, next) => {
   const { search, blues, rock, folk } = req.query;
   try {
@@ -64,7 +57,6 @@ router.get("/all-events/my-events", isAuthenticated, async (req, res, next) => {
     const myEvents = await Event.find({ createdBy: user });
     //allEvents.map((event) => {...event, isEditable: isOwnedByCurrentUser})
     res.status(200).json(myEvents);
->>>>>>> 0834bd0f7aec42a598fd189268d955855c6d3729
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
