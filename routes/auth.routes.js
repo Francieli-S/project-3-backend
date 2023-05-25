@@ -3,6 +3,8 @@ const User = require("../models/User.model");
 const bcryptjs = require("bcryptjs");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const router = require("express").Router();
+const uploader = require('../middleware/cloudinary.config')
+
 const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/; // spec char, a capital, 8 characters long
 
 router.get("/", (req, res, next) => {
@@ -64,6 +66,21 @@ router.post("/login", async (req, res) => {
 router.get("/verify", isAuthenticated, async (req, res) => {
   const user = await User.findById(req.payload.userId);
   res.json({ message: "User is authenticated", user });
+});
+
+// PUT to profile
+router.put("/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const payload = req.body;
+    const updatedUser = await User.findByIdAndUpdate(eventId, payload, {
+      new: true,
+    });
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
 });
 
 module.exports = router;

@@ -14,6 +14,10 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
+    imageUrl: {
+      type: String,
+      default: "./image/profile.picture.default.png"
+    },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
