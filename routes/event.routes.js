@@ -1,5 +1,6 @@
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Event = require("../models/Event.model");
+const uploader = require('../middleware/cloudinary.config');
 
 const router = require("express").Router();
 
@@ -73,12 +74,14 @@ router.get("/:eventId", async (req, res, next) => {
   }
 });
 
-router.post("/create", isAuthenticated, async (req, res, next) => {
+router.post("/create", isAuthenticated, uploader.single('imageUrl'), async (req, res, next) => {
   try {
     //console.log("event body", req.config.headers.authorization);
+    const imageUrl = req.file.path
     const newEvent = await Event.create({
       ...req.body,
       createdBy: req.payload.userId,
+      imageUrl: imageUrl,
     });
     res.status(201).json(newEvent);
   } catch (error) {

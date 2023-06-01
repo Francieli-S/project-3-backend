@@ -7,33 +7,32 @@ const eventSchema = new Schema(
       type: String,
       required: true,
     },
-
     date: {
       type: String,
       required: true,
       default: "20/05/2023",
     },
-
     location: {
       type: String,
       required: true,
     },
-
     genre: {
       type: String,
       required: false,
       default: "Soul",
     },
-
     details: {
       type: String,
       required: false,
       default: "Super cool show",
     },
-
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
+    },
+    imageUrl: {
+      type: String,
+      default: "some event pic"
     },
   },
   {
